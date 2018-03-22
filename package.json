@@ -1,0 +1,30 @@
+{
+  "name": "fournow",
+  "version": "0.0.0",
+  "description": "Foursquare app for showing nearby places",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "geo-position": "^1.0.2",
+    "mithril": "^1.1.6",
+    "path": "^0.12.7",
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "browserify": "^16.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel client/index.js | browserify - -o dist/bundle.js && cp client/index.html dist/",
+    "start": "npm run build && node server.js"
+  },
+  "keywords": [
+    "foursquare"
+  ],
+  "author": "Bas Huis",
+  "license": "MIT"
+}
