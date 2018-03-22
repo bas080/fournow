@@ -115,13 +115,13 @@ function categorySelect(categories = [], params) {
     anchor(
       `a${isSelected(everythingCategory) && ".selected"}`,
       { onclick: onClick.bind(null, everythingCategory) },
-      m('h2', everythingCategory.name)
+      m("h2", everythingCategory.name)
     ),
     ...categories.map(category =>
       anchor(
         `a${isSelected(category) && ".selected"}`,
         { onclick: onClick.bind(null, category) },
-        m('h2', category.name)
+        m("h2", category.name)
       )
     )
   ]

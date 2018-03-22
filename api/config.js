@@ -2,7 +2,8 @@ const assert = require("assert")
 
 module.exports = {
   api: {
-    port: process.env.API_PORT || 3000
+    // PORT is a heroku env variable.
+    port: process.env.PORT || 3000
   },
   foursquare: {
     version: toDefault("FOURSQUARE_VERSION", "20170801"),

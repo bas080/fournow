@@ -5,7 +5,7 @@ const registerRoutes = require("./route")
 const config = require("./config")
 const path = require("path")
 
-app.set("port", config.api.port || 3000)
+app.set("port", config.api.port)
 //app.use(express.static(__dirname)); // Current directory is root
 registerRoutes(app)
 
