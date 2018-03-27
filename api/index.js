@@ -7,7 +7,7 @@ const path = require("path")
 
 app.set("port", config.api.port)
 //app.use(express.static(__dirname)); // Current directory is root
-registerRoutes(app)
+registerRoutes(app, config)
 
 app.use(express.static(path.join(__dirname, "../dist/")))
 

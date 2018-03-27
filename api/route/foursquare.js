@@ -1,7 +1,6 @@
 const request = require("request-promise-native")
-const config = require("../config")
 
-function fourSquareHandler(fourSquareConfig) {
+function fourSquareHandler(config) {
   return function fourSquareRequest(req, res) {
     const onResponse = response => {
       res
@@ -12,30 +11,28 @@ function fourSquareHandler(fourSquareConfig) {
       return response
     }
 
-    const fourSquareRequestConfig = {
+    const requestConfig = {
       onResponse,
-      ...fourSquareConfig
+      ...config
     }
 
     const qs = {
-      ...config.foursquare.credentials,
-      //todo:
+      ...config.credentials,
       ...req.query,
-      v: config.foursquare.version
+      v: config.version
     }
 
     return request({
       simple: false,
       resolveWithFullResponse: true,
-      url: fourSquareRequestConfig.url,
-      method: fourSquareRequestConfig.method,
+      url: requestConfig.url,
+      method: requestConfig.method,
       qs
     })
-      .then(response =>
-        fourSquareRequestConfig.onResponse(response, onResponse)
-      )
+      .then(response => requestConfig.onResponse(response, onResponse))
       .catch(error => {
-        // most likely and error that derives from the onResponse callback
+        // Could be an error thrown in the onResponse or a request that failed
+        // to complete successfully
         console.error(error)
 
         res.sendStatus(500)
@@ -43,10 +40,16 @@ function fourSquareHandler(fourSquareConfig) {
   }
 }
 
-module.exports = function registerFourSquareRoutes(app) {
+module.exports = function registerFourSquareRoutes(app, config) {
+  const configuredHandler = urlConfig =>
+    fourSquareHandler({
+      ...urlConfig,
+      ...config
+    })
+
   app.get(
     "/venues/categories",
-    fourSquareHandler({
+    configuredHandler({
       method: "GET",
       url: "https://api.foursquare.com/v2/venues/categories"
     })
@@ -54,7 +57,7 @@ module.exports = function registerFourSquareRoutes(app) {
 
   app.get(
     "/venues/search",
-    fourSquareHandler({
+    configuredHandler({
       method: "GET",
       url: "https://api.foursquare.com/v2/venues/search"
     })
@@ -62,7 +65,7 @@ module.exports = function registerFourSquareRoutes(app) {
 
   app.get(
     "/venues/explore",
-    fourSquareHandler({
+    configuredHandler({
       method: "GET",
       url: "https://api.foursquare.com/v2/venues/explore",
       onResponse: (response, defaultResponse) => {
